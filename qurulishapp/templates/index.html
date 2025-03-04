@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Qurilish Ekspert Tizimi</title>
+</head>
+<body>
+    <h1>Qurilish Ekspert Tizimi</h1>
+    <form action="/recommend/" method="post">
+        <label for="condition">Qurilish sharoitini tanlang:</label>
+        <select name="condition">
+            {% for condition in conditions %}
+            <option value="{{ condition.name }}">{{ condition.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Tavsiya olish</button>
+        <script>
+document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Formani jo‘natishni bloklash
+
+    let selectedCondition = document.querySelector("select[name='condition']").value;
+
+    fetch("/recommend/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ condition: selectedCondition }),
+    })
+    .then(response => response.json())
+    .then(data => alert(data.recommendation || data.error))
+    .catch(error => console.error("Xatolik:", error));
+});
+</script>
+</script>
+    </form>
+</body>
+</html>
